@@ -11,8 +11,12 @@
 <body>
     <div class="container">
         <div class="user-info no-print">
-            <span id="userDisplay">👤 User</span>
-            <button onclick="handleLogout()" class="btn-logout">🚪 Logout</button>
+            <div class="admin-profile">
+                <span id="userDisplay">👤 User</span>
+                <img id="adminPhoto" src="" alt="Admin" class="admin-photo" style="display: none;">
+                <div class="admin-photo-placeholder" id="adminPhotoPlaceholder">👤</div>
+                <button onclick="handleLogout()" class="btn-logout">🚪 Logout</button>
+            </div>
         </div>
 
         <div class="header">
@@ -175,6 +179,24 @@
                         <div class="form-group">
                             <label>Tanggal Tanda Tangan:</label>
                             <input type="date" id="settingTanggal">
+                        </div>
+                    </div>
+
+                    <div class="settings-section" style="margin-bottom: 25px;">
+                        <h3>📸 Foto Profil Admin</h3>
+                        <div class="form-group">
+                            <label>Upload Foto Admin:</label>
+                            <input type="file" id="settingAdminPhoto" accept="image/*"
+                                onchange="handleAdminPhotoUpload(event)">
+                            <small style="color: #666; display: block; margin-top: 5px;">Upload foto profil (PNG, JPG,
+                                maksimal 2MB)</small>
+                            <div id="adminPhotoPreview" style="margin-top: 10px; display: none;">
+                                <img id="adminPhotoPreviewImage"
+                                    style="max-width: 150px; max-height: 150px; border: 2px solid #ddd; border-radius: 50%;">
+                                <button type="button" onclick="removeAdminPhoto()" class="btn-remove-logo"
+                                    style="display: block; margin-top: 5px; padding: 5px 10px; background: #f44336; color: white; border: none; border-radius: 3px; cursor: pointer;">Hapus
+                                    Foto</button>
+                            </div>
                         </div>
                     </div>
 

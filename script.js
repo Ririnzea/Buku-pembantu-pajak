@@ -481,6 +481,7 @@ function updateSignatureDisplay() {
 window.addEventListener('DOMContentLoaded', () => {
     updateSignatureDisplay();
     loadLogo();
+    loadAdminPhoto();
 });
 
 // ========== LOGO MANAGEMENT ==========
@@ -555,5 +556,80 @@ function loadLogo() {
     } else {
         logoImage.style.display = 'none';
         logoPlaceholder.style.display = 'flex';
+    }
+}
+
+// ========== ADMIN PHOTO MANAGEMENT ==========
+
+// Handle admin photo upload
+function handleAdminPhotoUpload(event) {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        alert('❌ File harus berupa gambar (PNG, JPG, dll)');
+        return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        alert('❌ Ukuran file maksimal 2MB');
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const photoData = e.target.result;
+
+        // Save to localStorage
+        localStorage.setItem('adminPhoto', photoData);
+
+        // Update preview in modal
+        document.getElementById('adminPhotoPreviewImage').src = photoData;
+        document.getElementById('adminPhotoPreview').style.display = 'block';
+
+        // Update photo in header
+        loadAdminPhoto();
+
+        alert('✅ Foto admin berhasil diupload!');
+    };
+
+    reader.readAsDataURL(file);
+}
+
+// Remove admin photo
+function removeAdminPhoto() {
+    if (confirm('Yakin ingin menghapus foto admin?')) {
+        localStorage.removeItem('adminPhoto');
+        document.getElementById('settingAdminPhoto').value = '';
+        document.getElementById('adminPhotoPreview').style.display = 'none';
+        loadAdminPhoto();
+        alert('✅ Foto admin berhasil dihapus!');
+    }
+}
+
+// Load and display admin photo
+function loadAdminPhoto() {
+    const photoData = localStorage.getItem('adminPhoto');
+    const photoImage = document.getElementById('adminPhoto');
+    const photoPlaceholder = document.getElementById('adminPhotoPlaceholder');
+
+    if (photoData && photoImage && photoPlaceholder) {
+        photoImage.src = photoData;
+        photoImage.style.display = 'block';
+        photoPlaceholder.style.display = 'none';
+
+        // Update preview in settings modal if it exists
+        const previewImage = document.getElementById('adminPhotoPreviewImage');
+        if (previewImage) {
+            previewImage.src = photoData;
+            document.getElementById('adminPhotoPreview').style.display = 'block';
+        }
+    } else if (photoImage && photoPlaceholder) {
+        photoImage.style.display = 'none';
+        photoPlaceholder.style.display = 'flex';
     }
 }
