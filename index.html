@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Pembantu Pajak</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="user-info no-print">
+            <span id="userDisplay">👤 User</span>
+            <button onclick="handleLogout()" class="btn-logout">🚪 Logout</button>
+        </div>
+
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-container" id="logoContainer">
+                    <img id="logoImage" src="" alt="Logo" style="display: none;">
+                    <div class="logo-placeholder" id="logoPlaceholder">LOGO</div>
+                </div>
+                <div class="header-text">
+                    <h1>BUKU PEMBANTU PAJAK</h1>
+                    <h2 id="headerMonth">BULAN DESEMBER 2025</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="school-info">
+            <div class="info-row">
+                <div class="info-label">NAMA MADRASAH</div>
+                <div class="info-separator">:</div>
+                <div class="info-value" id="infoNamaMadrasah">MAN 2 KOTA TIDORE KEPULAUAN</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">KELURAHAN</div>
+                <div class="info-separator">:</div>
+                <div class="info-value" id="infoKelurahan">MAREKU</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">KOTA</div>
+                <div class="info-separator">:</div>
+                <div class="info-value" id="infoKota">TIDORE KEPULAUAN</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">PROVINSI</div>
+                <div class="info-separator">:</div>
+                <div class="info-value" id="infoProvinsi">MALUKU UTARA</div>
+            </div>
+        </div>
+
+        <!-- Edit KOP Button -->
+        <div class="edit-kop-section no-print">
+            <button onclick="openKOPSettings()" class="btn-edit-kop">✏️ Edit KOP Surat</button>
+        </div>
+
+        <!-- Input Form -->
+        <div class="input-section no-print">
+            <h2>Tambah Transaksi Baru</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tanggal:</label>
+                    <input type="date" id="inputTanggal">
+                </div>
+                <div class="form-group">
+                    <label>No Bukti:</label>
+                    <input type="text" id="inputNoBukti" placeholder="No Bukti">
+                </div>
+                <div class="form-group">
+                    <label>Uraian:</label>
+                    <input type="text" id="inputUraian" placeholder="Contoh: Pungut Pajak PPN">
+                </div>
+                <div class="form-group">
+                    <label>Kode Rekening:</label>
+                    <input type="text" id="inputKodeRekening" placeholder="Kode Rekening">
+                </div>
+                <div class="form-group">
+                    <label>Pemotongan:</label>
+                    <input type="number" id="inputPemotongan" placeholder="0" step="1000">
+                </div>
+                <div class="form-group">
+                    <label>Penyetoran:</label>
+                    <input type="number" id="inputPenyetoran" placeholder="0" step="1000">
+                </div>
+            </div>
+            <div class="button-group">
+                <button onclick="addTransaction()" class="btn-add">Tambah Transaksi</button>
+                <button onclick="clearForm()" class="btn-clear">Reset Form</button>
+                <button onclick="clearAllData()" class="btn-delete">Hapus Semua Data</button>
+                <button onclick="openSettings()" class="btn-settings">⚙️ Pengaturan</button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal no-print">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⚙️ Pengaturan Dokumen</h2>
+                    <span class="close" onclick="closeSettings()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-grid">
+                        <div class="settings-section">
+                            <h3>Kepala Madrasah</h3>
+                            <div class="form-group">
+                                <label>Nama Lengkap:</label>
+                                <input type="text" id="settingKepalaNama" placeholder="Nama Kepala Madrasah">
+                            </div>
+                            <div class="form-group">
+                                <label>NIP:</label>
+                                <input type="text" id="settingKepalaNIP" placeholder="NIP Kepala Madrasah">
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Bendahara BOSDA</h3>
+                            <div class="form-group">
+                                <label>Nama Lengkap:</label>
+                                <input type="text" id="settingBendaharaNama" placeholder="Nama Bendahara">
+                            </div>
+                            <div class="form-group">
+                                <label>NIP:</label>
+                                <input type="text" id="settingBendaharaNIP" placeholder="NIP Bendahara">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section" style="margin-bottom: 25px;">
+                        <h3>🏫 Informasi Madrasah</h3>
+                        <div class="form-group">
+                            <label>Logo Madrasah:</label>
+                            <input type="file" id="settingLogo" accept="image/*" onchange="handleLogoUpload(event)">
+                            <small style="color: #666; display: block; margin-top: 5px;">Upload logo (PNG, JPG, maksimal
+                                2MB)</small>
+                            <div id="logoPreview" style="margin-top: 10px; display: none;">
+                                <img id="logoPreviewImage"
+                                    style="max-width: 150px; max-height: 150px; border: 2px solid #ddd; border-radius: 5px;">
+                                <button type="button" onclick="removeLogo()" class="btn-remove-logo"
+                                    style="display: block; margin-top: 5px; padding: 5px 10px; background: #f44336; color: white; border: none; border-radius: 3px; cursor: pointer;">Hapus
+                                    Logo</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Madrasah:</label>
+                            <input type="text" id="settingNamaMadrasah" placeholder="MAN 2 KOTA TIDORE KEPULAUAN">
+                        </div>
+                        <div class="form-group">
+                            <label>Kelurahan:</label>
+                            <input type="text" id="settingKelurahan" placeholder="MAREKU">
+                        </div>
+                        <div class="form-group">
+                            <label>Kota:</label>
+                            <input type="text" id="settingKota" placeholder="TIDORE KEPULAUAN">
+                        </div>
+                        <div class="form-group">
+                            <label>Provinsi:</label>
+                            <input type="text" id="settingProvinsi" placeholder="MALUKU UTARA">
+                        </div>
+                    </div>
+
+                    <div class="settings-section" style="margin-bottom: 25px;">
+                        <h3>📅 Tanggal & Tempat</h3>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="form-group">
+                                <label>Bulan & Tahun:</label>
+                                <input type="month" id="settingBulan">
+                            </div>
+                            <div class="form-group">
+                                <label>Tempat:</label>
+                                <input type="text" id="settingTempat" placeholder="Tidore">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Tanda Tangan:</label>
+                            <input type="date" id="settingTanggal">
+                        </div>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button onclick="saveSettings()" class="btn-save">💾 Simpan Pengaturan</button>
+                        <button onclick="closeSettings()" class="btn-cancel">Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table class="ledger-table">
+                <thead>
+                    <tr>
+                        <th>NOMOR</th>
+                        <th>TGL</th>
+                        <th>NO BUKTI</th>
+                        <th>URAIAN</th>
+                        <th>KODE REKENING</th>
+                        <th>PEMOTONGAN</th>
+                        <th>PENYETORAN</th>
+                        <th>SALDO</th>
+                        <th class="no-print">AKSI</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                    <!-- Transactions will be added here dynamically -->
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="5" style="text-align: center; font-weight: bold;">TOTAL</td>
+                        <td id="totalPemotongan">0</td>
+                        <td id="totalPenyetoran">0</td>
+                        <td>-</td>
+                        <td class="no-print"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Button to Open Annual Summary -->
+        <div class="annual-summary-button-section no-print">
+            <button onclick="openAnnualSummary()" class="btn-annual-summary">📊 Lihat Rekapitulasi Tahunan</button>
+        </div>
+
+        <!-- Annual Summary Modal -->
+        <div id="annualSummaryModal" class="modal no-print">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📊 Rekapitulasi Tahunan</h2>
+                    <span class="close" onclick="closeAnnualSummary()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <table class="annual-summary-table">
+                        <thead>
+                            <tr>
+                                <th>TAHUN</th>
+                                <th>TOTAL PEMOTONGAN</th>
+                                <th>TOTAL PENYETORAN</th>
+                                <th>SALDO AKHIR</th>
+                            </tr>
+                        </thead>
+                        <tbody id="annualSummaryBody">
+                            <!-- Annual summary will be populated here -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td style="text-align: center; font-weight: bold;">GRAND TOTAL</td>
+                                <td id="grandTotalPemotongan">0</td>
+                                <td id="grandTotalPenyetoran">0</td>
+                                <td id="grandTotalSaldo">0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="annual-print-section">
+                        <button onclick="printAnnualSummary()" class="btn-print">🖨️ Cetak Rekapitulasi Tahunan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signature Section -->
+        <div class="signature-section">
+            <div class="signature-left">
+                <p class="signature-label">Mengetahui</p>
+                <p class="signature-title">Kepala Madrasah</p>
+                <div class="signature-space"></div>
+                <p class="signature-line" id="kepalaName">................................................</p>
+                <p class="signature-nip" id="kepalaNIP">NIP.................................</p>
+            </div>
+            <div class="signature-right">
+                <p class="signature-label" id="documentDate">Tidore....................2025</p>
+                <p class="signature-title">Bendahara BOSDA</p>
+                <div class="signature-space"></div>
+                <p class="signature-line" id="bendaharaName">................................................</p>
+                <p class="signature-nip" id="bendaharaNIP">NIP.................................</p>
+            </div>
+        </div>
+
+        <!-- Print Button -->
+        <div class="print-section no-print">
+            <button onclick="window.print()" class="btn-print">🖨️ Cetak Buku Pembantu Pajak</button>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
